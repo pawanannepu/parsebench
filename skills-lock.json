@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "skills": {
+    "duckdb-docs": {
+      "source": "duckdb/duckdb-skills",
+      "sourceType": "github",
+      "skillPath": "skills/duckdb-docs/SKILL.md",
+      "computedHash": "d907581e423d89fc2acdc02079901cae357193cf1599fb42415da7c30df2e4cc"
+    },
+    "huggingface-datasets": {
+      "source": "huggingface/skills",
+      "sourceType": "github",
+      "skillPath": "skills/huggingface-datasets/SKILL.md",
+      "computedHash": "be979e085283148b152ea225c8608adcee5778a5b3023c5692619a0fdeb64ffa"
+    },
+    "mcp-builder": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/mcp-builder/SKILL.md",
+      "computedHash": "5a699fa929d99d7e6b1ebe10f13bf960d9ad452b70bd0733efd5d1de9524e285"
+    },
+    "pydantic": {
+      "source": "pydantic/skills",
+      "sourceType": "github",
+      "skillPath": "skills/pydantic/SKILL.md",
+      "computedHash": "434540e43897b5ad8db567d7a77bd71ec0522e10134aaa23941050ca7ff7e1e7"
+    },
+    "query": {
+      "source": "duckdb/duckdb-skills",
+      "sourceType": "github",
+      "skillPath": "skills/query/SKILL.md",
+      "computedHash": "8c4722442f5eba39b7a034e95be5a405910ce08adb12ade3834f49c92542d236"
+    },
+    "read-file": {
+      "source": "duckdb/duckdb-skills",
+      "sourceType": "github",
+      "skillPath": "skills/read-file/SKILL.md",
+      "computedHash": "bc3e30a25bdebae84ae7afdb6b7f97f1ece7479347a0c146f11661812b61e6e1"
+    },
+    "typer": {
+      "source": "fastapi/typer",
+      "sourceType": "github",
+      "skillPath": "typer/.agents/skills/typer/SKILL.md",
+      "computedHash": "b9dd8ef1e394466c7622781a7a0fb9aad8bdd31336a2c9578254d0c0135ce5bd"
+    },
+    "uv": {
+      "source": "astral-sh/agent-plugins",
+      "sourceType": "github",
+      "skillPath": "plugins/astral/skills/uv/SKILL.md",
+      "computedHash": "dc731173401706ae12ce2e71d1b4b088149af9f0c5b7023301e11f0a16474380"
+    }
+  }
+}

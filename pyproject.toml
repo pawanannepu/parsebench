@@ -1,0 +1,60 @@
+[project]
+name = "parsebench"
+version = "0.1.0"
+description = "An agent grounded benchmark for document parsing APIs: same PDFs, same questions, same model, only the parser changes."
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+authors = [
+    { name = "Pawan", email = "aiinnoeng@gmail.com" }
+]
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "numpy>=2.5.5",
+    "pydantic>=2.14.3",
+    "pydantic-settings>=2.16.3",
+    # Floor kept low on purpose: docling caps typer below 0.28.
+    "typer>=0.16",
+]
+
+# One extra per parser. Heavy (torch) parsers only install when asked for.
+# Commercial vendor extras are added by feature 20.
+[project.optional-dependencies]
+pymupdf = ["pymupdf"]
+docling = ["docling", "torch", "torchvision"]
+marker = ["marker-pdf", "torch", "torchvision"]
+
+[project.scripts]
+parsebench = "parsebench.cli:app"
+parsebench-mcp = "parsebench.mcp_server:main"
+
+[build-system]
+requires = ["uv_build>=0.11.16,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.5.0",
+]
+
+[tool.uv]
+# Docling and Marker may pin torch (or other deps) differently, so they are
+# declared conflicting from day one and each installs on its own.
+conflicts = [
+    [{ extra = "docling" }, { extra = "marker" }],
+]
+
+# CPU only torch wheels on Linux (small, GPU free installs). The CPU index has
+# no macOS wheels, so macOS uses the normal PyPI wheels.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+torchvision = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

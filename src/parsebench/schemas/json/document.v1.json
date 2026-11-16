@@ -1,0 +1,174 @@
+{
+  "$defs": {
+    "DocType": {
+      "description": "Kind of document. Release 1 has invoices only.",
+      "enum": [
+        "invoice"
+      ],
+      "title": "DocType",
+      "type": "string"
+    },
+    "Knobs": {
+      "additionalProperties": false,
+      "description": "Layout features the generator switched on for a document (v1 knobs).",
+      "properties": {
+        "footnotes": {
+          "default": false,
+          "title": "Footnotes",
+          "type": "boolean"
+        },
+        "multi_column": {
+          "default": false,
+          "title": "Multi Column",
+          "type": "boolean"
+        },
+        "spanning_tables": {
+          "default": false,
+          "title": "Spanning Tables",
+          "type": "boolean"
+        },
+        "tables": {
+          "default": false,
+          "title": "Tables",
+          "type": "boolean"
+        }
+      },
+      "title": "Knobs",
+      "type": "object"
+    },
+    "RealOrigin": {
+      "additionalProperties": false,
+      "description": "Provenance of a real world document: where it was fetched and under which license.",
+      "properties": {
+        "license": {
+          "minLength": 1,
+          "title": "License",
+          "type": "string"
+        },
+        "origin": {
+          "const": "real",
+          "title": "Origin",
+          "type": "string"
+        },
+        "retrieved_on": {
+          "format": "date",
+          "title": "Retrieved On",
+          "type": "string"
+        },
+        "source_url": {
+          "pattern": "^https?://\\S+$",
+          "title": "Source Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "origin",
+        "source_url",
+        "license",
+        "retrieved_on"
+      ],
+      "title": "RealOrigin",
+      "type": "object"
+    },
+    "SyntheticOrigin": {
+      "additionalProperties": false,
+      "description": "Provenance of a generated document: generator, version, seed, and source data hash.",
+      "properties": {
+        "generator": {
+          "minLength": 1,
+          "title": "Generator",
+          "type": "string"
+        },
+        "generator_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Generator Version",
+          "type": "string"
+        },
+        "origin": {
+          "const": "synthetic",
+          "title": "Origin",
+          "type": "string"
+        },
+        "seed": {
+          "minimum": 0,
+          "title": "Seed",
+          "type": "integer"
+        },
+        "source_data_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Data Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "origin",
+        "generator",
+        "generator_version",
+        "seed",
+        "source_data_sha256"
+      ],
+      "title": "SyntheticOrigin",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One PDF in a task set, keyed by `doc_id`. `sha256` covers the PDF bytes.",
+  "properties": {
+    "doc_id": {
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Doc Id",
+      "type": "string"
+    },
+    "doc_type": {
+      "$ref": "#/$defs/DocType"
+    },
+    "knobs": {
+      "$ref": "#/$defs/Knobs"
+    },
+    "pages": {
+      "minimum": 1,
+      "title": "Pages",
+      "type": "integer"
+    },
+    "provenance": {
+      "discriminator": {
+        "mapping": {
+          "real": "#/$defs/RealOrigin",
+          "synthetic": "#/$defs/SyntheticOrigin"
+        },
+        "propertyName": "origin"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SyntheticOrigin"
+        },
+        {
+          "$ref": "#/$defs/RealOrigin"
+        }
+      ],
+      "title": "Provenance"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "doc_id",
+    "sha256",
+    "doc_type",
+    "pages",
+    "knobs",
+    "provenance"
+  ],
+  "title": "Document",
+  "type": "object"
+}

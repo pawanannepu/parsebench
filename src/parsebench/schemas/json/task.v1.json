@@ -1,0 +1,65 @@
+{
+  "$defs": {
+    "AnswerType": {
+      "description": "How a Task's gold answer is normalized and compared (feature 7).",
+      "enum": [
+        "number",
+        "currency",
+        "date",
+        "text"
+      ],
+      "title": "AnswerType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A question about one document, keyed by `task_id` (`<doc_id>-qNN`).\n\n`gold` is the canonical answer for its `answer_type` (feature 7 defines the\ncanonical forms). `source_ref` says where in the source data the answer lives.",
+  "properties": {
+    "answer_type": {
+      "$ref": "#/$defs/AnswerType"
+    },
+    "doc_id": {
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Doc Id",
+      "type": "string"
+    },
+    "gold": {
+      "minLength": 1,
+      "title": "Gold",
+      "type": "string"
+    },
+    "question": {
+      "minLength": 1,
+      "title": "Question",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_ref": {
+      "minLength": 1,
+      "title": "Source Ref",
+      "type": "string"
+    },
+    "task_id": {
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-q[0-9]{2,}$",
+      "title": "Task Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_id",
+    "doc_id",
+    "question",
+    "answer_type",
+    "gold",
+    "source_ref"
+  ],
+  "title": "Task",
+  "type": "object"
+}

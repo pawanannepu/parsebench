@@ -10,6 +10,7 @@ authors = [
 requires-python = ">=3.12,<3.14"
 dependencies = [
     "numpy>=2.5.5",
+    "pyarrow>=26.0.1",
     "pydantic>=2.14.3",
     "pydantic-settings>=2.16.3",
     # Floor kept low on purpose: docling caps typer below 0.28.
@@ -33,6 +34,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "pyarrow-stubs>=20.0.0.20260819",
     "pytest>=9.2.0",
     "pytest-asyncio>=1.5.0",
 ]

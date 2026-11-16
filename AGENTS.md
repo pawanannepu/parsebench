@@ -21,6 +21,7 @@ uv sync                      # install core (no parsers, no torch)
 uv sync --extra pymupdf      # add one parser extra
 uv run parsebench --help     # run the CLI
 uv run pytest                # test
+uv run python -m parsebench.schemas.snapshot   # after a schema_version bump, add the new JSON Schema snapshot
 uv run ruff check . && uv run ruff format . && uv run pyright   # after /develop tooling
 ```
 
@@ -41,10 +42,13 @@ Stored in `docs/specs/`. Format: `docs/specs/NNNN-title/index.md` (plus `rationa
 - Benchmark fairness (scope ground rules): one model and one prompt for every parser, same truncation, parser default settings only, retries resend the identical request.
 - Layout: one subpackage per pipeline stage under `src/parsebench/`, as spec 0001 laid out.
 - Test any code that does I/O or calls a model against fixture parsers and the httpx mock transport, never real vendors.
+- Shared records (Document, Task, ParseResult, Answer, Result, RunManifest) come only from `parsebench.schemas`; read them through its codec (`parse_jsonl`, `parse_json`, `build`, `from_arrow_row`), never raw `model_validate`. A shape change needs a `schema_version` bump, an upgrade function, and a new snapshot; committed snapshots are never edited ([spec 0002](docs/specs/0002-core-schemas/index.md)). Exceptions live in `src/parsebench/errors.py`.
+- Decision log: every decision the engineer takes (a spec choice, a scope change, a tooling pick, a reversal) belongs in [DECISIONS.md](DECISIONS.md). Run `/decisions` after `/scope`, `/architect`, or `/audit`, and `/decisions add "..."` for a choice made in chat. Never renumber or delete; a reversal is a new entry that marks the old one `Superseded`.
 
 ## Tooling
 
 Chosen here, installed by `/develop tooling`: Ruff (lint + format), Pyright strict, pre commit hooks running Ruff check, Ruff format, and Pyright on every commit, and GitHub Actions CI per spec 0001 (`uv sync --locked`, `uv lock --check`, lint, types, tests).
+CI also runs `scripts/check-schema-snapshots.sh` (fails if a committed `src/parsebench/schemas/json/*.v*.json` changed; spec 0002, AC-9). pyarrow types come from `pyarrow-stubs` in the dev group.
 Testing gate: pytest unit + integration tests on fixture parsers and the stubbed answering model (no keys, no torch, no network).
 
 ## Git

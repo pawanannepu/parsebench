@@ -1,6 +1,13 @@
 {
   "version": 2,
   "skills": {
+    "designing-data-storage": {
+      "source": "legout/data-agent-skills",
+      "commit": "cc3748d1c0eea9e89ec7c9a34584ac89ec4570cb",
+      "sourceType": "github",
+      "skillPath": "skills/designing-data-storage/SKILL.md",
+      "computedHash": "32ac115b2f733815716dd008609cf0a819c47e4d1dbb0db0cf5eb6978d5bd4e2"
+    },
     "duckdb-docs": {
       "source": "duckdb/duckdb-skills",
       "sourceType": "github",

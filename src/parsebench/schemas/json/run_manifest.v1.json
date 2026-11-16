@@ -1,0 +1,395 @@
+{
+  "$defs": {
+    "AnsweringConfig": {
+      "additionalProperties": false,
+      "description": "The one model, prompt, and truncation every parser was answered with.",
+      "properties": {
+        "model": {
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "prompt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Prompt Sha256",
+          "type": "string"
+        },
+        "provider": {
+          "minLength": 1,
+          "title": "Provider",
+          "type": "string"
+        },
+        "temperature": {
+          "minimum": 0,
+          "title": "Temperature",
+          "type": "number"
+        },
+        "truncation": {
+          "$ref": "#/$defs/TruncationRule"
+        }
+      },
+      "required": [
+        "provider",
+        "model",
+        "temperature",
+        "prompt_sha256",
+        "truncation"
+      ],
+      "title": "AnsweringConfig",
+      "type": "object"
+    },
+    "Environment": {
+      "additionalProperties": false,
+      "description": "Machine and install the run happened on.",
+      "properties": {
+        "cpu": {
+          "title": "Cpu",
+          "type": "string"
+        },
+        "os": {
+          "minLength": 1,
+          "title": "Os",
+          "type": "string"
+        },
+        "python_version": {
+          "minLength": 1,
+          "title": "Python Version",
+          "type": "string"
+        },
+        "system_tools": {
+          "items": {
+            "$ref": "#/$defs/ToolVersion"
+          },
+          "title": "System Tools",
+          "type": "array"
+        },
+        "threads": {
+          "minimum": 1,
+          "title": "Threads",
+          "type": "integer"
+        },
+        "torch_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Torch Version"
+        },
+        "uv_lock_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Uv Lock Sha256"
+        }
+      },
+      "required": [
+        "python_version",
+        "os",
+        "cpu",
+        "threads",
+        "uv_lock_sha256",
+        "torch_version",
+        "system_tools"
+      ],
+      "title": "Environment",
+      "type": "object"
+    },
+    "ModelRevision": {
+      "additionalProperties": false,
+      "description": "A pinned model weight download: Hugging Face repo plus commit SHA.",
+      "properties": {
+        "repo": {
+          "minLength": 1,
+          "title": "Repo",
+          "type": "string"
+        },
+        "revision": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "repo",
+        "revision"
+      ],
+      "title": "ModelRevision",
+      "type": "object"
+    },
+    "ParserInfo": {
+      "additionalProperties": false,
+      "description": "One parser's self report: package, version (PEP 440), extra, and pinned models.",
+      "properties": {
+        "extra": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Extra"
+        },
+        "model_revisions": {
+          "items": {
+            "$ref": "#/$defs/ModelRevision"
+          },
+          "title": "Model Revisions",
+          "type": "array"
+        },
+        "package": {
+          "minLength": 1,
+          "title": "Package",
+          "type": "string"
+        },
+        "package_version": {
+          "minLength": 1,
+          "title": "Package Version",
+          "type": "string"
+        },
+        "parser_id": {
+          "pattern": "^[a-z0-9]+(?:[-_][a-z0-9]+)*$",
+          "title": "Parser Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "parser_id",
+        "package",
+        "package_version",
+        "extra",
+        "model_revisions"
+      ],
+      "title": "ParserInfo",
+      "type": "object"
+    },
+    "SchemaVersions": {
+      "additionalProperties": false,
+      "description": "The schema version of every record type this run wrote.",
+      "properties": {
+        "answer": {
+          "minimum": 1,
+          "title": "Answer",
+          "type": "integer"
+        },
+        "document": {
+          "minimum": 1,
+          "title": "Document",
+          "type": "integer"
+        },
+        "parse_result": {
+          "minimum": 1,
+          "title": "Parse Result",
+          "type": "integer"
+        },
+        "result": {
+          "minimum": 1,
+          "title": "Result",
+          "type": "integer"
+        },
+        "run_manifest": {
+          "minimum": 1,
+          "title": "Run Manifest",
+          "type": "integer"
+        },
+        "task": {
+          "minimum": 1,
+          "title": "Task",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "document",
+        "task",
+        "parse_result",
+        "answer",
+        "result",
+        "run_manifest"
+      ],
+      "title": "SchemaVersions",
+      "type": "object"
+    },
+    "SettingEntry": {
+      "additionalProperties": false,
+      "description": "One non secret setting: its field name (not the env alias) and its value as text.",
+      "properties": {
+        "name": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "title": "SettingEntry",
+      "type": "object"
+    },
+    "TaskSetRef": {
+      "additionalProperties": false,
+      "description": "Which frozen task set a run used, by folder name and content hash.",
+      "properties": {
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^(dev|v[0-9]+\\.[0-9]+)$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "sha256"
+      ],
+      "title": "TaskSetRef",
+      "type": "object"
+    },
+    "ToolVersion": {
+      "additionalProperties": false,
+      "description": "A system tool a parser shells out to, and its version.",
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ],
+      "title": "ToolVersion",
+      "type": "object"
+    },
+    "TruncationKind": {
+      "description": "How parser text is cut before it reaches the answering model.",
+      "enum": [
+        "head_chars"
+      ],
+      "title": "TruncationKind",
+      "type": "string"
+    },
+    "TruncationRule": {
+      "additionalProperties": false,
+      "description": "How parser text was cut before answering. `limit` is in the unit `kind` sets.",
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/TruncationKind"
+        },
+        "limit": {
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "limit"
+      ],
+      "title": "TruncationRule",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Everything needed to reproduce a run, keyed by `run_id`. Holds no secrets.\n\n`run_id`'s date must equal `created_at`'s UTC date. Every tuple is sorted\nand unique by its key, so equal manifests always give equal bytes.",
+  "properties": {
+    "answering": {
+      "$ref": "#/$defs/AnsweringConfig"
+    },
+    "concurrency": {
+      "minimum": 1,
+      "title": "Concurrency",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "environment": {
+      "$ref": "#/$defs/Environment"
+    },
+    "parsers": {
+      "items": {
+        "$ref": "#/$defs/ParserInfo"
+      },
+      "title": "Parsers",
+      "type": "array"
+    },
+    "run_id": {
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-f]{8}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "schema_versions": {
+      "$ref": "#/$defs/SchemaVersions"
+    },
+    "scorer_version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "title": "Scorer Version",
+      "type": "string"
+    },
+    "seed": {
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "settings": {
+      "items": {
+        "$ref": "#/$defs/SettingEntry"
+      },
+      "title": "Settings",
+      "type": "array"
+    },
+    "task_set": {
+      "$ref": "#/$defs/TaskSetRef"
+    }
+  },
+  "required": [
+    "run_id",
+    "created_at",
+    "seed",
+    "task_set",
+    "scorer_version",
+    "answering",
+    "parsers",
+    "environment",
+    "settings",
+    "concurrency",
+    "schema_versions"
+  ],
+  "title": "RunManifest",
+  "type": "object"
+}

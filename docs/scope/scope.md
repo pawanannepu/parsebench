@@ -17,7 +17,7 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 |---|---------|-------|--------|
 | 1 | Stack & architecture | Foundation | done |
 | 2 | Coding standards & tooling | Foundation | in-progress |
-| 3 | Core schemas | Foundation | planned |
+| 3 | Core schemas | Foundation | done |
 | 4 | Synthetic invoice generator | Release 1 (P0) | planned |
 | 5 | Parser adapter contract + first two adapters | Release 1 (P0) | planned |
 | 6 | Answering protocol | Release 1 (P0) | planned |
@@ -63,10 +63,18 @@ Capture conventions and tooling from the real scaffold (lint, format, type stric
 **Done when:** root `AGENTS.md` reflects the real stack, and lint, format, type checks, and CI run clean on the scaffold.
 - [x] Capture conventions + tooling choices: `/audit`
 
-### 3. Core schemas · needs a decision
+### 3. Core schemas · done
 The strict contracts every part shares: Task, ParseResult, Result, plus a run manifest (task set version, scorer version, model, prompt hash). If these are wrong, rescoring and comparing across runs break.
 **Done when:** schemas reject malformed records, every record carries the versions needed to reproduce it, and a Result can be rebuilt from a stored ParseResult alone.
-- [ ] Design it (spec): `/architect core schemas`
+- [x] Design it (spec): `/architect core schemas`
+- [x] Build it: `/develop core schemas`
+  - [x] Records you can write and trust: pyarrow dependency, errors, types, and the six records (AC-1, AC-3, AC-4, AC-5)
+  - [x] Canonical form and codec (AC-1, AC-6, AC-7)
+  - [x] Cross record checks and the regrade test (AC-5, AC-8)
+  - [x] Versioning guard and Arrow mapping: upgrades, snapshots, CI guard, Arrow schemas (AC-2, AC-7, AC-9)
+- [x] Verify it: `/check verify core schemas`
+- [x] Test it: `/test core schemas`
+Spec [0002](../specs/0002-core-schemas/index.md) · code in `src/parsebench/schemas/`, `src/parsebench/errors.py`
 
 ## Release 1 (P0): the weekend MVP loop
 

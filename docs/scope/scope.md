@@ -15,8 +15,8 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 
 | # | Feature | Phase | Status |
 |---|---------|-------|--------|
-| 1 | Stack & architecture | Foundation | in-progress |
-| 2 | Coding standards & tooling | Foundation | planned |
+| 1 | Stack & architecture | Foundation | done |
+| 2 | Coding standards & tooling | Foundation | in-progress |
 | 3 | Core schemas | Foundation | planned |
 | 4 | Synthetic invoice generator | Release 1 (P0) | planned |
 | 5 | Parser adapter contract + first two adapters | Release 1 (P0) | planned |
@@ -49,7 +49,7 @@ _These are recommendations to keep your build orderly, not requirements. Skip an
 
 ## Foundations
 
-### 1. Stack & architecture · in-progress
+### 1. Stack & architecture · done
 Decide the stack and repo layout, then scaffold a runnable project so every later release builds on real structure. Your listed stack and repo layout are the starting input for this spec.
 **Done when:** the stack and layout are recorded in a spec, and the empty scaffold installs, runs a no op command, and passes build locally.
 - [x] Decide the stack (spec): `/architect stack & architecture`
@@ -58,10 +58,10 @@ Decide the stack and repo layout, then scaffold a runnable project so every late
 - [x] Test it: `/test stack & architecture`
 Spec [0001](../specs/0001-stack-architecture/index.md) · code in `pyproject.toml`, `src/parsebench/`
 
-### 2. Coding standards & tooling
+### 2. Coding standards & tooling · in-progress
 Capture conventions and tooling from the real scaffold (lint, format, type strictness, pre commit hooks, CI), then install them.
 **Done when:** root `AGENTS.md` reflects the real stack, and lint, format, type checks, and CI run clean on the scaffold.
-- [ ] Capture conventions + tooling choices: `/audit`
+- [x] Capture conventions + tooling choices: `/audit`
 
 ### 3. Core schemas · needs a decision
 The strict contracts every part shares: Task, ParseResult, Result, plus a run manifest (task set version, scorer version, model, prompt hash). If these are wrong, rescoring and comparing across runs break.

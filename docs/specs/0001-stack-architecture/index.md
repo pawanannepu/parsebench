@@ -1,7 +1,7 @@
 # 0001. Stack & architecture: one Python package with a light core, per parser extras, and file based storage
 
 **Date**: 2026-11-16
-**Status**: In Progress
+**Status**: Accepted
 
 ## Summary
 

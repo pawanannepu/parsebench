@@ -54,8 +54,8 @@ Decide the stack and repo layout, then scaffold a runnable project so every late
 **Done when:** the stack and layout are recorded in a spec, and the empty scaffold installs, runs a no op command, and passes build locally.
 - [x] Decide the stack (spec): `/architect stack & architecture`
 - [x] Scaffold from the decision: `/develop stack & architecture`
-- [ ] Verify it: `/check verify stack & architecture`
-- [ ] Test it: `/test stack & architecture`
+- [x] Verify it: `/check verify stack & architecture`
+- [x] Test it: `/test stack & architecture`
 Spec [0001](../specs/0001-stack-architecture/index.md) · code in `pyproject.toml`, `src/parsebench/`
 
 ### 2. Coding standards & tooling
